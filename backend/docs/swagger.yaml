@@ -1,0 +1,108 @@
+basePath: /
+definitions:
+  models.Flow:
+    properties:
+      createdAt:
+        description: Timestamp when the flow was created
+        type: string
+      eventsJSON:
+        description: location of the event
+        type: string
+      id:
+        description: Primary Key
+        type: integer
+      name:
+        description: Name of the flow
+        type: string
+      updatedAt:
+        description: Timestamp the flow was last updated
+        type: string
+      videoURL:
+        description: location of video + audio of recorded event
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@flusso.dev
+    name: API support
+  title: Flusso API
+  version: "1.0"
+paths:
+  /flows:
+    post:
+      consumes:
+      - application/json
+      description: Create a new flow with the provided details
+      parameters:
+      - description: Flow data
+        in: body
+        name: flow
+        required: true
+        schema:
+          $ref: '#/definitions/models.Flow'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Flow'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "500":
+          description: Failed to create flow
+          schema:
+            type: string
+      summary: Create a new flow
+      tags:
+      - flows
+  /flows/:
+    get:
+      description: Retrieve all flows from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Flow'
+            type: array
+        "500":
+          description: Failed to retrieve flows
+          schema:
+            type: string
+      summary: Get all flows
+      tags:
+      - flows
+  /flows/{id}:
+    get:
+      description: Retrieve a single flow by its ID
+      parameters:
+      - description: Flow ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Flow'
+        "400":
+          description: Invalid flow ID
+          schema:
+            type: string
+        "404":
+          description: Flow not found
+          schema:
+            type: string
+      summary: Get a flow by ID
+      tags:
+      - flows
+swagger: "2.0"
