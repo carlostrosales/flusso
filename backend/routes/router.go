@@ -2,30 +2,33 @@ package routes
 
 import (
 	"encoding/json"
-	"strconv"
-
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/carlostrosales/flusso/models"
 	"github.com/carlostrosales/flusso/stores"
-	"github.com/gorilla/mux"
 )
 
 // InitRoutes initializes the HTTP routes
-func InitRoutes() *mux.Router {
-	router := mux.NewRouter()
-
+func RegisterRoutes(mux *http.ServeMux) {
 	// Define routes by registering three routes mapping URL paths to handlers
-	router.HandleFunc("/flows", createFlowHandler).Methods("POST")
-	router.HandleFunc("/flows", getFlowsHandler).Methods("GET")
-	router.HandleFunc("/flows/{id}", getFlowByIDHandler).Methods("GET")
+	mux.HandleFunc("/flows", createFlowHandler)
+	mux.HandleFunc("/flows/", getFlowsHandler)
+	mux.HandleFunc("/flows/{id}", getFlowByIDHandler)
 
-	return router
 }
 
-// Define handlers
-
-// createFlowHandler handles POST /flows
+// @Summary Create a new flow
+// @Description Create a new flow with the provided details
+// @Tags flows
+// @Accept json
+// @Produce json
+// @Param flow body models.Flow true "Flow data"
+// @Success 201 {object} models.Flow
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 500 {string} string "Failed to create flow"
+// @Router /flows [post]
 func createFlowHandler(w http.ResponseWriter, r *http.Request) {
 	var flow models.Flow
 	err := json.NewDecoder(r.Body).Decode(&flow)
@@ -44,7 +47,13 @@ func createFlowHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(flow)
 }
 
-// getFlowHandler handles GET /flows
+// @Summary Get all flows
+// @Description Retrieve all flows from the database
+// @Tags flows
+// @Produce json
+// @Success 200 {array} models.Flow
+// @Failure 500 {string} string "Failed to retrieve flows"
+// @Router /flows/ [get]
 func getFlowsHandler(w http.ResponseWriter, r *http.Request) {
 	flows, err := stores.GetAllFlows()
 	if err != nil {
@@ -55,10 +64,25 @@ func getFlowsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(flows)
 }
 
-// getFlowByIDHandler handles GET /flows/{id}
+// @Summary Get a flow by ID
+// @Description Retrieve a single flow by its ID
+// @Tags flows
+// @Produce json
+// @Param id path int true "Flow ID"
+// @Success 200 {object} models.Flow
+// @Failure 400 {string} string "Invalid flow ID"
+// @Failure 404 {string} string "Flow not found"
+// @Router /flows/{id} [get]
 func getFlowByIDHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
+	// Extract the ID from the URL path
+	idStr := strings.TrimPrefix(r.URL.Path, "/flows/")
+
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		http.Error(w, "Invalid flow ID", http.StatusBadRequest)
 		return
