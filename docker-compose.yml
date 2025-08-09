@@ -17,15 +17,14 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - QUARKUS_PROFILE=dev
+      - QUARKUS_PROFILE=dev`
     depends_on:
       - db
 
   db:
     image: postgres:15
     restart: always
-    environment:
-      POSTGRES_DB=workspace
+    environment: POSTGRES_DB=workspace
       POSTGRES_USER=workspace_user
       POSTGRES_PASSWORD=workspace_pass
     ports:
