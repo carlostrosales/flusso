@@ -8,3 +8,9 @@ python-multipart
 # Testing
 pytest
 httpx
+
+# Data validation and settings management
+pydantic
+
+# AI integration
+openai

@@ -1,6 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import hello
+from pydantic import BaseModel
+
+class AskRequest(BaseModel):
+    question: str
+    documentId: Optional[str] = None
+    blockId: Optional[str] = None
+
+class AskResponse(BaseModel):
+    id: str
+    answer: str
+
 
 app = FastAPI(
     title="Flusso API",
@@ -27,3 +38,7 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+@app.post("/ask", response_model=AskResponse)
+async def ask(request: AskRequest):
+

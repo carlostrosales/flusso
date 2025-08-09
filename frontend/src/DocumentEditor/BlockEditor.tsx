@@ -20,6 +20,7 @@ export const BlockEditor = ({
   const [showCommandModal, setShowCommandModal] = useState(false);
   const [modalBlockId, setModalBlockId] = useState<string | null>(null);
   const [showAskModal, setShowAskModal] = useState(false);
+  const [question, setQuestion] = useState<string>("");
 
   useEffect(() => {
     if (focusId != undefined) {
@@ -73,7 +74,7 @@ export const BlockEditor = ({
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", maxWidth: "50%" }}>
+    <div className="flex flex-col gap-2">
       {blocksArray.map((block) => (
         <input
           placeholder="Start typing, press '/' for command pallete..."
@@ -89,41 +90,11 @@ export const BlockEditor = ({
         ></input>
       ))}
       {showCommandModal && (
-        <div
-          style={{
-            display: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-            width: "15rem",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#f5f5f5",
-              padding: "1rem",
-              borderRadius: "0.5rem",
-              minWidth: "10rem",
-              boxShadow:
-                "0 10px 25px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.1)",
-              border: "1px solid rgba(0, 0, 0, 0.1)",
-              transform: "translateX(4rem) translateY(0px)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-            }}
-          >
-            <h6 style={{ marginTop: "0", textAlign: "left" }}>Suggested</h6>
+        <div className="bg-gray-50 p-4 rounded-lg w-1/8 ml-50">
+          <div className="flex flex-col space-y-2 w-100%">
+            <h6>Suggested</h6>
             <button
-              style={{
-                border: "none",
-                backgroundColor: "#f5f5f5",
-                textAlign: "left",
-                padding: "0.5rem",
-                borderRadius: "0.5rem",
-                cursor: "pointer",
-                transition: "background-color 0.2s",
-              }}
+              className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#e0e0e0")
               }
@@ -138,15 +109,7 @@ export const BlockEditor = ({
               Ask
             </button>
             <button
-              style={{
-                border: "none",
-                backgroundColor: "#f5f5f5",
-                textAlign: "left",
-                padding: "0.5rem",
-                borderRadius: "0.5rem",
-                cursor: "pointer",
-                transition: "background-color 0.2s",
-              }}
+              className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#e0e0e0")
               }
@@ -158,15 +121,7 @@ export const BlockEditor = ({
               Summarize
             </button>
             <button
-              style={{
-                border: "none",
-                backgroundColor: "#f5f5f5",
-                textAlign: "left",
-                padding: "0.5rem",
-                borderRadius: "0.5rem",
-                cursor: "pointer",
-                transition: "background-color 0.2s",
-              }}
+              className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#e0e0e0")
               }
@@ -178,15 +133,7 @@ export const BlockEditor = ({
               Rewrite
             </button>
             <button
-              style={{
-                border: "none",
-                backgroundColor: "#f5f5f5",
-                textAlign: "left",
-                padding: "0.5rem",
-                borderRadius: "0.5rem",
-                cursor: "pointer",
-                transition: "background-color 0.2s",
-              }}
+              className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#e0e0e0")
               }
@@ -198,15 +145,7 @@ export const BlockEditor = ({
               Search
             </button>
             <button
-              style={{
-                border: "none",
-                backgroundColor: "#f5f5f5",
-                textAlign: "left",
-                padding: "0.5rem",
-                borderRadius: "0.5rem",
-                cursor: "pointer",
-                transition: "background-color 0.2s",
-              }}
+              className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#e0e0e0")
               }
@@ -222,9 +161,24 @@ export const BlockEditor = ({
       )}
 
       {showAskModal && (
-        <form className="flex flex-col gap-2">
-          <input placeholder="Ask..." />
-          <button className="w-full" type="submit">
+        <form className="flex flex-col gap-2 w-1/2 h-50 p-4 bg-white rounded-lg shadow-lg">
+          <h2 className="text-lg font-semibold mb-4">Ask a question</h2>
+          <input
+            type="text"
+            placeholder="Type your question here..."
+            className="border p-2 rounded-md"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+          />
+
+          <button
+            className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition-colors"
+            type="button"
+            onClick={() => {
+              setShowAskModal(false);
+              setShowCommandModal(false);
+            }}
+          >
             Ask
           </button>
         </form>
