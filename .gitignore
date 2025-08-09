@@ -1,1 +1,30 @@
+# Secrets / env
 .env
+.env.local
+.env.*.local
+*.env
+
+# Node / frontend
+frontend/node_modules/
+frontend/.next/
+frontend/.turbo/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+*.log
+
+# Python / backend
+backend/.venv/
+backend/venv/
+backend/__pycache__/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Docker
+**/docker-data/
