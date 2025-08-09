@@ -17,7 +17,7 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - QUARKUS_PROFILE=dev`
+      - DATABASE_URL=postgresql://workspace_user:workspace_pass@db:5432/workspace
     depends_on:
       - db
 

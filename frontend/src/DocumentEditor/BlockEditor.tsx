@@ -76,7 +76,7 @@ export const BlockEditor = ({
     <div style={{ display: "flex", flexDirection: "column", maxWidth: "50%" }}>
       {blocksArray.map((block) => (
         <input
-          placeholder="Start typing..."
+          placeholder="Start typing, press '/' for command pallete..."
           key={block.id}
           value={block.content}
           onChange={(e) => handleOnChange(e, block.id)}
