@@ -1,7 +1,10 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Text, ForeignKey, JSON, Column, Enum, UUID as SAUUID
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, Text, UUID, DateTime, ForeignKey
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import UUID
 import uuid
+from app.core.db import Base
+
 
 class Block(Base):
     __tablename__ = "blocks"
