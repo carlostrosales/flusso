@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import hello
 from pydantic import BaseModel
+from typing import Optional
+from app.service.AskService import AskService
+
 
 class AskRequest(BaseModel):
     question: str
@@ -41,4 +44,12 @@ async def health_check():
 
 @app.post("/ask", response_model=AskResponse)
 async def ask(request: AskRequest):
+    if not request.question:
+        raise HTTPException(status_code=400, detail="Client Error: Question not provided")
+    service = AskService()
+    respId, answer = service.askQuestion(request.question)
+    if not answer:
+        raise HTTPException(status_code=502, detail="Gateway Error: Failed to get an answer")
+    return AskResponse(id=respId, answer=answer)
 
+@app.post
