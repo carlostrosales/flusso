@@ -18,3 +18,4 @@ class AskService:
             input=question
         )
         return response.id, response.output[0].content[0].text
+    

@@ -14,3 +14,9 @@ pydantic
 
 # AI integration
 openai
+
+# Database
+sqlalchemy
+pgvector
+alembic
+psycopg[binary]

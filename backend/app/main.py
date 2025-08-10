@@ -52,4 +52,4 @@ async def ask(request: AskRequest):
         raise HTTPException(status_code=502, detail="Gateway Error: Failed to get an answer")
     return AskResponse(id=respId, answer=answer)
 
-@app.post
+
