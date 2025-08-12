@@ -16,3 +16,5 @@ class Block(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     document = relationship("Document", back_populates="blocks")
+
+
