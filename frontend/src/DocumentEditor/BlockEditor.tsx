@@ -64,13 +64,35 @@ export const BlockEditor = ({
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: string
+    index: string,
   ) => {
     onBlocksChange((prev) =>
       prev.map((block) =>
-        index == block.id ? { ...block, content: e.target.value } : block
-      )
+        index == block.id ? { ...block, content: e.target.value } : block,
+      ),
     );
+  };
+
+  const handleAskQuestion = async () => {
+    try {
+      const res = await fetch("https://127.0.0.1:8004/ask", {
+	"method": "POST"
+	"headers": {"Content-type": "application/json"},
+	"body": JSON.stringify({question}),
+      });
+
+      if (!res.ok) {
+	throw new Error("Failed to submit question.");
+      }
+
+      const data = await res.json();
+      console.log("Question submitted, response received:", data);
+
+      setShowModal(false);
+      setShowCommandModal(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -161,7 +183,13 @@ export const BlockEditor = ({
       )}
 
       {showAskModal && (
-        <form className="flex flex-col gap-2 w-1/2 h-50 p-4 bg-white rounded-lg shadow-lg">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleQuestion();
+          }}
+          className="flex flex-col gap-2 w-1/2 h-50 p-4 bg-white rounded-lg shadow-lg"
+        >
           <h2 className="text-lg font-semibold mb-4">Ask a question</h2>
           <input
             type="text"
