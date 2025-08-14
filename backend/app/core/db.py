@@ -12,7 +12,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflash=False, bind=engine)
 Base = declaritive_base()
 
 def get_db():
-    db = SessionLocal()
+         db = SessionLocal()
     try:
         yield db
     finally:
