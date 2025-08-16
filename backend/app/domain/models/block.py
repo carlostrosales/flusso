@@ -14,11 +14,11 @@ if TYPE_CHECKING:
 class Block(Base):
     __tablename__ = "block"
 
-    block_id: MappedColumn[uuid.UUID] = mapped_column(
+    block_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
-    document_id: Mapped[uuid:UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("documents.id", ondelete="CASCADE")
+    document_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("document.document_id", ondelete="CASCADE")
     )
     role: Mapped[str] = mapped_column(String, nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)

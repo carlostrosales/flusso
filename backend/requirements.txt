@@ -19,4 +19,4 @@ openai
 sqlalchemy
 pgvector
 alembic
-psycopg[binary]
+psycopg2-binary

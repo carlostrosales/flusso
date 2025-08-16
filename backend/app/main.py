@@ -4,6 +4,9 @@ from app.routers import hello
 from pydantic import BaseModel
 from typing import Optional
 from app.service.AskService import AskService
+from app.core.db import Base, engine
+from app.domain.models import block, document
+from sqlalchemy.orm import declarative_base
 
 
 class AskRequest(BaseModel):
@@ -34,6 +37,11 @@ app.add_middleware(
 
 # Include routers
 app.include_router(hello.router)
+
+
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
 
 
 @app.get("/")

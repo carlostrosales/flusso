@@ -1,11 +1,11 @@
-from __future import annotations
+from __future__ import annotations
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 from sqlalchemy import String, Column, DateTime
-from uuid import uuid
+import uuid
 from app.core.db import Base
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from .document import Block
