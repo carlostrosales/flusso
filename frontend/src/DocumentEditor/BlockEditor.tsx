@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from 'react';
 
 type Block = {
   id: string;
   content: string;
-  type: "paragraph" | "prompt" | "response";
+  type: 'paragraph' | 'prompt' | 'response';
 };
 
 interface BlockEditorProps {
@@ -11,16 +11,13 @@ interface BlockEditorProps {
   onBlocksChange: (blocks: Block[] | ((prev: Block[]) => Block[])) => void;
 }
 
-export const BlockEditor = ({
-  blocksArray,
-  onBlocksChange,
-}: BlockEditorProps) => {
+export const BlockEditor = ({ blocksArray, onBlocksChange }: BlockEditorProps) => {
   const refs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [focusId, setFocusId] = useState<string | null>(null);
   const [showCommandModal, setShowCommandModal] = useState(false);
   const [modalBlockId, setModalBlockId] = useState<string | null>(null);
   const [showAskModal, setShowAskModal] = useState(false);
-  const [question, setQuestion] = useState<string>("");
+  const [question, setQuestion] = useState<string>('');
 
   useEffect(() => {
     if (focusId != undefined) {
@@ -28,65 +25,57 @@ export const BlockEditor = ({
     }
   }, [focusId, blocksArray]);
 
-  const handleKeyDown =
-    (index: string) => (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key == "Enter") {
-        const newBlock: Block = {
-          id: crypto.randomUUID(),
-          content: "",
-          type: "paragraph",
-        };
-        const newArrayWithNewBlock: Block[] = [...blocksArray, newBlock];
-        onBlocksChange(newArrayWithNewBlock);
-        setFocusId(newBlock.id);
-      } else if (e.key == "Delete" || e.key == "Backspace") {
-        console.log("Backspace/Delete pressed on block:", index);
+  const handleKeyDown = (index: string) => (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == 'Enter') {
+      const newBlock: Block = {
+        id: crypto.randomUUID(),
+        content: '',
+        type: 'paragraph',
+      };
+      const newArrayWithNewBlock: Block[] = [...blocksArray, newBlock];
+      onBlocksChange(newArrayWithNewBlock);
+      setFocusId(newBlock.id);
+    } else if (e.key == 'Delete' || e.key == 'Backspace') {
+      console.log('Backspace/Delete pressed on block:', index);
 
-        const idx = blocksArray.findIndex((b) => b.id === index);
-        const currentBlock = blocksArray[idx];
+      const idx = blocksArray.findIndex((b) => b.id === index);
+      const currentBlock = blocksArray[idx];
 
-        console.log("==================");
-        if (currentBlock.content.endsWith("/") && modalBlockId == index) {
-          setShowCommandModal(false);
-          setModalBlockId(null);
-          console.log("This line was hit.");
-        }
-        if (blocksArray[idx].content == "" && idx != 0) {
-          const newArray = blocksArray.filter((_, i) => i != idx);
-          onBlocksChange(newArray);
-          setFocusId(blocksArray[idx - 1].id);
-        }
-      } else if (e.key == "/") {
-        setShowCommandModal(true);
-        setModalBlockId(index);
+      console.log('==================');
+      if (currentBlock.content.endsWith('/') && modalBlockId == index) {
+        setShowCommandModal(false);
+        setModalBlockId(null);
+        console.log('This line was hit.');
       }
-    };
+      if (blocksArray[idx].content == '' && idx != 0) {
+        const newArray = blocksArray.filter((_, i) => i != idx);
+        onBlocksChange(newArray);
+        setFocusId(blocksArray[idx - 1].id);
+      }
+    } else if (e.key == '/') {
+      setShowCommandModal(true);
+      setModalBlockId(index);
+    }
+  };
 
-  const handleOnChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: string,
-  ) => {
-    onBlocksChange((prev) =>
-      prev.map((block) =>
-        index == block.id ? { ...block, content: e.target.value } : block,
-      ),
-    );
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, index: string) => {
+    onBlocksChange((prev) => prev.map((block) => (index == block.id ? { ...block, content: e.target.value } : block)));
   };
 
   const handleAskQuestion = async () => {
     try {
-      const res = await fetch("https://127.0.0.1:8004/ask", {
-	"method": "POST"
-	"headers": {"Content-type": "application/json"},
-	"body": JSON.stringify({question}),
+      const res = await fetch('https://127.0.0.1:8004/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
       });
 
       if (!res.ok) {
-	throw new Error("Failed to submit question.");
+        throw new Error('Failed to submit question.');
       }
 
       const data = await res.json();
-      console.log("Question submitted, response received:", data);
+      console.log('Question submitted, response received:', data);
 
       setShowModal(false);
       setShowCommandModal(false);
@@ -108,7 +97,7 @@ export const BlockEditor = ({
           ref={(el) => {
             refs.current[block.id] = el;
           }}
-          style={{ border: "none", outline: "none" }}
+          style={{ border: 'none', outline: 'none' }}
         ></input>
       ))}
       {showCommandModal && (
@@ -117,12 +106,8 @@ export const BlockEditor = ({
             <h6>Suggested</h6>
             <button
               className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
-              onMouseOver={(e) =>
-                (e.currentTarget.style.backgroundColor = "#e0e0e0")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.backgroundColor = "#f5f5f5")
-              }
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#e0e0e0')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
               onClick={() => {
                 setShowCommandModal(false);
                 setShowAskModal(true);
@@ -132,48 +117,32 @@ export const BlockEditor = ({
             </button>
             <button
               className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
-              onMouseOver={(e) =>
-                (e.currentTarget.style.backgroundColor = "#e0e0e0")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.backgroundColor = "#f5f5f5")
-              }
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#e0e0e0')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
               onClick={() => setShowCommandModal(false)}
             >
               Summarize
             </button>
             <button
               className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
-              onMouseOver={(e) =>
-                (e.currentTarget.style.backgroundColor = "#e0e0e0")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.backgroundColor = "#f5f5f5")
-              }
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#e0e0e0')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
               onClick={() => setShowCommandModal(false)}
             >
               Rewrite
             </button>
             <button
               className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
-              onMouseOver={(e) =>
-                (e.currentTarget.style.backgroundColor = "#e0e0e0")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.backgroundColor = "#f5f5f5")
-              }
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#e0e0e0')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
               onClick={() => setShowCommandModal(false)}
             >
               Search
             </button>
             <button
               className="w-full text-left p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors border-none cursor-pointer"
-              onMouseOver={(e) =>
-                (e.currentTarget.style.backgroundColor = "#e0e0e0")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.backgroundColor = "#f5f5f5")
-              }
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#e0e0e0')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
               onClick={() => setShowCommandModal(false)}
             >
               Insert
