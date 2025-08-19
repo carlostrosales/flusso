@@ -1,15 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-type Block = {
-  id: string;
-  content: string;
-  type: 'paragraph' | 'prompt' | 'response';
-};
-
-interface BlockEditorProps {
-  blocksArray: Block[];
-  onBlocksChange: (blocks: Block[] | ((prev: Block[]) => Block[])) => void;
-}
+import { Block, BlockEditorProps } from '../types.ts';
 
 export const BlockEditor = ({ blocksArray, onBlocksChange }: BlockEditorProps) => {
   const refs = useRef<{ [key: string]: HTMLInputElement | null }>({});
