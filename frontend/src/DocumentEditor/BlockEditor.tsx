@@ -53,7 +53,7 @@ export const BlockEditor = ({ blocksArray, onBlocksChange }: BlockEditorProps) =
     onBlocksChange((prev) => prev.map((block) => (index == block.id ? { ...block, content: e.target.value } : block)));
   };
 
-  const handleAskQuestion = async () => {
+  const handleQuestion = async () => {
     try {
       const res = await fetch('https://127.0.0.1:8004/ask', {
         method: 'POST',
