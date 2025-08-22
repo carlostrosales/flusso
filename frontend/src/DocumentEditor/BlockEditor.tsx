@@ -79,7 +79,7 @@ export const BlockEditor = ({ blocksArray, onBlocksChange }: BlockEditorProps) =
     <div className="flex flex-col gap-2">
       {blocksArray.map((block) => (
         <input
-          placeholder="Start typing, press '/' for command pallete..."
+          placeholder="Start typing here, press '/' for command pallete..."
           key={block.id}
           value={block.content}
           onChange={(e) => handleOnChange(e, block.id)}
