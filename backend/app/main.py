@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.controllers import HelloController, DocumentController, AskController
+from app.controllers import DocumentController, AskController
 from app.core.db import Base, engine
 
 
@@ -20,7 +20,6 @@ app.add_middleware(
 )
 
 # Include routers (like registering controllers in other web frameworks)
-app.include_router(HelloController.router)
 app.include_router(DocumentController.router)
 app.include_router(AskController.router)
 
