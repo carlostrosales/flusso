@@ -1,23 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import hello
-from pydantic import BaseModel
-from typing import Optional
-from app.service.AskService import AskService
+from app.controllers import HelloController, DocumentController, AskController
 from app.core.db import Base, engine
-from app.domain.models import block, document
-from sqlalchemy.orm import declarative_base
-
-
-class AskRequest(BaseModel):
-    question: str
-    documentId: Optional[str] = None
-    blockId: Optional[str] = None
-
-
-class AskResponse(BaseModel):
-    id: str
-    answer: str
 
 
 app = FastAPI(
@@ -35,13 +19,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(hello.router)
+# Include routers (like registering controllers in other web frameworks)
+app.include_router(HelloController.router)
+app.include_router(DocumentController.router)
+app.include_router(AskController.router)
 
 
 @app.on_event("startup")
-def on_startup():
+async def on_startup():
     Base.metadata.create_all(bind=engine)
+    print("Database tables created successfully")
 
 
 @app.get("/")
@@ -53,17 +40,3 @@ async def root():
 async def health_check():
     return {"status": "healthy"}
 
-
-@app.post("/ask", response_model=AskResponse)
-async def ask(request: AskRequest):
-    if not request.question:
-        raise HTTPException(
-            status_code=400, detail="Client Error: Question not provided"
-        )
-    service = AskService()
-    respId, answer = service.askQuestion(request.question)
-    if not answer:
-        raise HTTPException(
-            status_code=502, detail="Gateway Error: Failed to get an answer"
-        )
-    return AskResponse(id=respId, answer=answer)
