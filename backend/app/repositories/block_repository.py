@@ -13,6 +13,13 @@ class BlockRepository:
         self.db.commit()
         self.db.refresh(block)
         return block
+    
+    def get(self, document_id: UUID) -> Block:
+        return (
+            self.db.query(Block)
+            .filter(Block.document_id == document_id)
+            .first()
+        )
 
     def list_for_document(self, document_id: UUID) -> List[Block]:
         return (
@@ -21,3 +28,4 @@ class BlockRepository:
             .order_by(Block.created_at)
             .all()
         )
+    
