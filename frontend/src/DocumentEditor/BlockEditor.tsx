@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { Block, BlockEditorProps } from '../types.ts';
+import type { Block, BlockEditorProps } from '../types.ts';
 
 export const BlockEditor = ({ blocksArray, onBlocksChange }: BlockEditorProps) => {
   const refs = useRef<{ [key: string]: HTMLInputElement | null }>({});
@@ -68,7 +68,7 @@ export const BlockEditor = ({ blocksArray, onBlocksChange }: BlockEditorProps) =
       const data = await res.json();
       console.log('Question submitted, response received:', data);
 
-      setShowModal(false);
+      setShowAskModal(false);
       setShowCommandModal(false);
     } catch (err) {
       console.log(err);
